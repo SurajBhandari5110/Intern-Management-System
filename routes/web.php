@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TLController;
+use App\Http\Controllers\InternController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,4 +22,15 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+});
+
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/tl/dashboard', [TLController::class, 'dashboard'])->name('tl.dashboard');
+    Route::get('/intern/dashboard', [InternController::class, 'dashboard'])->name('intern.dashboard');
 });
