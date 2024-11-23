@@ -51,7 +51,9 @@
             <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
             <p class="text-muted mb-0">Role: Team Leader</p>
         </div>
-    </div><div class="container my-5">
+    </div>
+
+    <div class="container my-5">
         <h1 class="text-center mb-4">Welcome, Team Leader</h1>
         
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -75,6 +77,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Assigned On</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,10 +87,18 @@
                         <td>{{ $assignment->intern->name }}</td>
                         <td>{{ $assignment->intern->email }}</td>
                         <td>{{ $assignment->created_at->format('d-m-Y') }}</td>
+                        <td>
+                            <!-- Remove Intern Button -->
+                            <form action="{{ route('tl.interns.destroy', $assignment->intern->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Remove Intern</button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">No interns assigned yet.</td>
+                        <td colspan="5" class="text-center">No interns assigned yet.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -108,14 +119,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Assign Intern</button>
         </form>
-    
-        
     </div>
- 
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-

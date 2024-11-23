@@ -66,7 +66,22 @@ class TlInternAssignmentController extends Controller
             'intern_id' => $request->intern_id,
         ]);
 
-        return redirect()->route('tl.index')->with('success', 'Intern assigned successfully.');
+        return redirect()->route('tl.dashboard')->with('success', 'Intern assigned successfully.');
+    }
+    public function destroy($internId)
+    {
+        $user = Auth::user(); // Get logged-in TL's data
+        $assignment = TlInternAssignment::where('tl_id', $user->id)
+            ->where('intern_id', $internId) // Find the intern assigned to this TL
+            ->first();
+
+        if ($assignment) {
+            $assignment->delete(); // Remove the intern assignment
+            return redirect()->route('tl.dashboard')->with('success', 'Intern removed successfully.');
+        } else {
+            return redirect()->route('tl.dashboard')->with('error', 'Intern not found.');
+        }
+    
     }
 }
 

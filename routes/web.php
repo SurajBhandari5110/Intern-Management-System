@@ -43,6 +43,8 @@ Route::middleware(['auth', 'role:team_leader'])->group(function () {
     Route::get('/tl/dashboard', [TlInternAssignmentController::class, 'dashboard'])->name('tl.dashboard');
     Route::get('/tl/interns/create', [TlInternAssignmentController::class, 'create'])->name('tl.interns.create');
     Route::post('/tl/interns', [TlInternAssignmentController::class, 'store'])->name('tl.interns.store');
+    Route::delete('/tl/dashboard/{internId}', [TlInternAssignmentController::class, 'destroy'])->name('tl.interns.destroy');
+
 });
 
 // Intern Routes
