@@ -24,10 +24,16 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
-
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::view('/', 'index');
+Route::get('/login', [AuthController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/contact', function () {
+    return view('contact');
+});
+Route::view('/about', 'about');
+Route::view('/future-proofing', 'future-proofing');
+
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {

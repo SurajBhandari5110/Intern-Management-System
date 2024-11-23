@@ -8,10 +8,12 @@ use TCG\Voyager\Models\Role;
 
 class AuthController extends Controller
 {
-    public function showLoginForm() {
-        return view('auth.login');
+    // Show login page
+    public function index() {
+        return view('auth.login'); // Ensure this view file exists
     }
 
+    // Handle login logic
     public function login(Request $request) {
         // Validate input
         $request->validate([
@@ -24,7 +26,9 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Redirect based on role
-            if ($user->role->name == 'team_leader') {
+            if ($user->role->name == 'admin') {
+                return redirect()->route('voyager.dashboard'); // Voyager admin panel
+            } elseif ($user->role->name == 'team_leader') {
                 return redirect()->route('tl.dashboard');
             } elseif ($user->role->name == 'intern') {
                 return redirect()->route('intern.dashboard');
@@ -35,6 +39,7 @@ class AuthController extends Controller
         return back()->withErrors(['email' => 'Invalid email or password.']);
     }
 
+    // Handle logout
     public function logout() {
         Auth::logout();
         return redirect('/login');
