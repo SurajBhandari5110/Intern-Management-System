@@ -6,18 +6,30 @@
     <title>Team Leader Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .dashboard-card {
-            transition: transform 0.3s ease;
+        .profile-card {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .dashboard-card:hover {
-            transform: translateY(-10px);
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Intern Dashboard</a>
+            <a class="navbar-brand" href="#">Team Leader Dashboard</a>
             <div class="d-flex">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -26,38 +38,84 @@
             </div>
         </div>
     </nav>
+
+    <!-- Profile Card -->
     <div class="container my-5">
-        <h1 class="text-center mb-4">Welcome, Team Leader</h1>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card dashboard-card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Assigned Interns</h5>
-                        <p class="card-text">Manage the interns assigned to you.</p>
-                        <a href="{{ route('tl.dashboard') }}" class="btn btn-primary">View Interns</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card dashboard-card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Assign New Intern</h5>
-                        <p class="card-text">Add a new intern to your team.</p>
-                        <a href="{{ route('tl.interns.create') }}" class="btn btn-success">Assign Now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card dashboard-card shadow">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Performance Reports</h5>
-                        <p class="card-text">Analyze the performance of your team.</p>
-                        <a href="#" class="btn btn-info">View Reports</a>
-                    </div>
-                </div>
-            </div>
+        <div class="profile-card bg-white text-center">
+            @if($user->image)
+                <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="profile-image">
+            @else
+                <img src="https://via.placeholder.com/120" alt="Default Profile" class="profile-image">
+            @endif
+            <h3 class="mb-3">{{ $user->name }}</h3>
+            <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
+            <p class="text-muted mb-0">Role: Team Leader</p>
         </div>
+    </div><div class="container my-5">
+        <h1 class="text-center mb-4">Welcome, Team Leader</h1>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Welcome, {{ $user->name }}</h2>
+            <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Assigned Interns Section -->
+        <h4>Assigned Interns</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Assigned On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($assignments as $assignment)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $assignment->intern->name }}</td>
+                        <td>{{ $assignment->intern->email }}</td>
+                        <td>{{ $assignment->created_at->format('d-m-Y') }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No interns assigned yet.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <!-- Assign New Intern Section -->
+        <h4 class="mt-5">Assign New Intern</h4>
+        <form action="{{ route('tl.interns.store') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="intern_id" class="form-label">Select Intern</label>
+                <select name="intern_id" id="intern_id" class="form-select" required>
+                    <option value="" disabled selected>Choose an intern</option>
+                    @foreach($interns as $intern)
+                        <option value="{{ $intern->id }}">{{ $intern->name }} ({{ $intern->email }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Assign Intern</button>
+        </form>
+    
+        
     </div>
+ 
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+

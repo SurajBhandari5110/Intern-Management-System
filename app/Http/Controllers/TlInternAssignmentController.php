@@ -13,12 +13,39 @@ class TlInternAssignmentController extends Controller
     // Show all interns assigned to the logged-in TL
     public function index()
     {
+        $user = Auth::user(); 
         $tlId = auth()->id();
-        $interns = TlInternAssignment::where('tl_id', $tlId)
+        $interns = TLInternAssignment::where('tl_id', $tlId)
             ->with('intern') // Assuming you have a relationship defined in the User model
             ->get();
-        return view('tl.dashboard', compact('interns'));
+        return view('tl.index', compact('interns','user'));
     }
+    public function dashboard()
+{
+    $user = Auth::user(); // Fetch the logged-in TL
+
+    // Fetch interns assigned to the logged-in TL
+    $assignments = TlInternAssignment::with('intern')  // Assuming `intern` is the relationship method in the `TlInternAssignment` model
+        ->where('tl_id', $user->id)
+        ->get();
+
+    // Fetch all available interns who are not yet assigned to the TL
+    $interns = User::whereHas('roles', function($query) {
+        $query->where('name', 'intern'); // Replace 'intern' with the actual role name
+    })
+    ->whereNotIn('id', $assignments->pluck('intern_id'))
+    ->get();
+
+    // Fetch logged-in TL data
+    $tlData = User::find($user->id);  // Get the TL details (Name, Email, Image)
+
+    return view('tl.dashboard', compact('user','assignments', 'interns', 'tlData'));
+}
+
+    
+    
+
+    
 
     // Show a form to assign a new intern
     public function create()
@@ -39,7 +66,7 @@ class TlInternAssignmentController extends Controller
             'intern_id' => $request->intern_id,
         ]);
 
-        return redirect()->route('tl.interns.index')->with('success', 'Intern assigned successfully.');
+        return redirect()->route('tl.index')->with('success', 'Intern assigned successfully.');
     }
 }
 

@@ -14,8 +14,14 @@ class TlInternAssignment extends Model
         'tl_id', 'intern_id',
     ];
     public function intern()
-{
+    {
     return $this->belongsTo(User::class, 'intern_id');
-}
+    }
+    public function tlAssignments()
+    {
+    return $this->hasMany(TlInternAssignment::class, 'tl_id');
+    }
+    
+
 
 }

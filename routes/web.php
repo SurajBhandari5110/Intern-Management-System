@@ -24,6 +24,8 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
+//Public URLs
+
 Route::view('/', 'index');
 Route::get('/login', [AuthController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -31,18 +33,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/contact', function () {
     return view('contact');
 });
+Route::view('/about', 'about');
+Route::view('/future-proofing', 'future-proofing');
 
-
-// Admin Routes (Handled by Voyager)
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin', function () {
-        return redirect()->route('voyager.dashboard');
-    })->name('voyager.dashboard');
-});
 
 // Team Leader Routes
 Route::middleware(['auth', 'role:team_leader'])->group(function () {
-    Route::get('/tl/dashboard', [TlInternAssignmentController::class, 'index'])->name('tl.dashboard');
+    Route::get('/tl/interns', [TlInternAssignmentController::class, 'index'])->name('tl.interns.index'); // Your custom view
+    Route::get('/tl/dashboard', [TlInternAssignmentController::class, 'dashboard'])->name('tl.dashboard');
     Route::get('/tl/interns/create', [TlInternAssignmentController::class, 'create'])->name('tl.interns.create');
     Route::post('/tl/interns', [TlInternAssignmentController::class, 'store'])->name('tl.interns.store');
 });
@@ -54,4 +52,3 @@ Route::middleware(['auth', 'role:intern'])->group(function () {
 
 //log out
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
