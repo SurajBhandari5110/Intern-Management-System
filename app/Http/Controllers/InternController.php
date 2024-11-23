@@ -8,9 +8,9 @@ use TCG\Voyager\Models\Role;
 
 class InternController extends Controller
 {
-    public function dashboard() {
-        // Fetch available TLs
-        $tls = User::where('id', Role::where('name', 'Team Leader')->first()->id)->get();
-        return view('intern.dashboard', compact('tls'));
+    public function dashboard()
+    {
+        $user = Auth::user(); // Fetch the logged-in user
+        return view('intern.dashboard', compact('user')); // Pass user data to the view
     }
 }

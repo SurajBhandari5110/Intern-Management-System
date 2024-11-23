@@ -41,4 +41,14 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function interns()
+{
+    return $this->hasMany(TLInternAssignment::class, 'tl_id');
+}
+
+public function tl()
+{
+    return $this->belongsTo(User::class, 'intern_id');
+}
+
 }
