@@ -44,7 +44,7 @@
     <div class="container my-5">
         <div class="profile-card bg-white text-center">
             @if($user->image)
-                <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="profile-image">
+                <img src="{{ asset('storage/'.$user->image) }}" alt="Profile Image" class="profile-image">
             @else
                 <img src="https://cdn-icons-png.flaticon.com/512/10841/10841518.png" alt="Default Profile" class="profile-image">
             @endif
@@ -158,7 +158,9 @@
         Track Intern Performance
     </a>
 </div>
-    
+    <!-- Button to navigate to the intern assignment form -->
+<a href="{{ route('tl.assign_intern') }}" class="btn btn-primary mt-3">Assign Intern to Project</a>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

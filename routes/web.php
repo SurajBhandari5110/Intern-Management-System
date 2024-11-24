@@ -8,7 +8,7 @@ use App\Http\Controllers\TLController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudyMaterialController;
-
+use App\Http\Controllers\EODController;
 
 
 /*
@@ -111,3 +111,10 @@ Route::get('/intern/course-details/{course}', [InternController::class, 'courseD
 
 // Handle course detail updates
 Route::post('/intern/course-details/{course}', [InternController::class, 'updateCourseDetails'])->name('intern.course.update');
+
+//EOD
+
+
+
+Route::get('/tl/assign-intern', [TlInternAssignmentController::class, 'assignIntern'])->name('tl.assign_intern');
+Route::post('tl/assign-intern', [TlInternAssignmentController::class, 'storeAssignment'])->name('tl.project_team.store');

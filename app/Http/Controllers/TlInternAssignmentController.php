@@ -5,11 +5,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use TCG\Voyager\Models\Role; 
+use App\Models\ProjectTeam; 
 use App\Models\StudyMaterial;
 use App\Models\TlInternAssignment;
 use Illuminate\Support\Facades\DB;
 use App\Models\InternStudyRecord;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Project;
 
 class TlInternAssignmentController extends Controller
 
@@ -29,7 +31,7 @@ class TlInternAssignmentController extends Controller
     // Show a form to assign a new intern
     public function create()
     {
-        $interns = User::where('role', 'intern')->get(); // Filter interns from the User table
+        $interns = User::where('role_id', '4')->get(); // Filter interns from the User table
         return view('tl.assign', compact('interns'));
     }
 
@@ -71,13 +73,6 @@ public function viewTable($tableName)
     // Pass the data to the view
     return view('study-material.view', compact('data', 'tableName'));
 }
-
-
-    
-    
-
-    
-
     
 
     // Assign a new intern
@@ -187,6 +182,86 @@ public function trackPerformance(Request $request)
     }
 
     return view('tl.track-performance', compact('interns', 'courses', 'records'));
+}
+public function assignIntern()
+{
+    // Fetch all available projects
+    $projects = Project::all();
+
+    // Fetch interns assigned to the logged-in TL
+    $tlId = auth()->id();
+    
+    
+    $interns = User::where('role_id', '4')->get();
+
+    return view('tl.assign_intern', compact('projects', 'interns'));
+}
+
+
+
+
+public function storeAssignment(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'project_id' => 'required|exists:projects,id',
+        'intern_id' => 'required|exists:users,id',
+    ]);
+
+    // Create a new project_team record
+    ProjectTeam::create([
+        'project_name' => $request->input('project_id'), // Assuming project_name is the name of the project
+        'tl_id' => auth()->id(), // Automatically set to the logged-in TL's ID
+        'intern_id' => $request->input('intern_id'),
+    ]);
+
+    return redirect()->route('tl.dashboard')->with('success', 'Intern assigned to the project successfully.');
+}
+
+public function submitEOD(Request $request)
+{
+    $request->validate([
+        'today' => 'required|string',
+        'tomorrow' => 'required|string',
+        'issue' => 'nullable|string',
+    ]);
+
+    // Get the project assigned to the intern
+    $internId = auth()->id();
+    $project = ProjectTeam::where('intern_id', $internId)->first();
+
+    if (!$project) {
+        return redirect()->back()->with('error', 'No project assigned.');
+    }
+
+    // Determine table name dynamically (e.g., `olft`)
+    $projectTable = $project->project->name; // Assuming project name is used as table name
+
+    DB::table($projectTable)->insert([
+        'intern_id' => $internId,
+        'today' => $request->today,
+        'tomorrow' => $request->tomorrow,
+        'issue' => $request->issue,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->back()->with('success', 'EOD submitted successfully.');
+}
+
+public function viewEODReports($projectId)
+{
+    $project = Project::findOrFail($projectId);
+    $tlId = auth()->id();
+
+    // Ensure the TL has access to this project
+    $interns = ProjectTeam::where('project_id', $projectId)
+                          ->where('tl_id', $tlId)
+                          ->pluck('intern_id');
+
+    $reports = DB::table($project->name)->whereIn('intern_id', $interns)->get();
+
+    return view('tl.eod_reports', compact('reports', 'project'));
 }
 
 
