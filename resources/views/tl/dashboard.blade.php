@@ -14,8 +14,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .profile-image {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 20px;
@@ -45,7 +45,7 @@
             @if($user->image)
                 <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="profile-image">
             @else
-                <img src="https://via.placeholder.com/120" alt="Default Profile" class="profile-image">
+                <img src="https://cdn-icons-png.flaticon.com/512/10841/10841518.png" alt="Default Profile" class="profile-image">
             @endif
             <h3 class="mb-3">{{ $user->name }}</h3>
             <p class="mb-1"><strong>Email:</strong> {{ $user->email }}</p>
@@ -53,22 +53,13 @@
         </div>
     </div>
 
+    <!-- Main Dashboard -->
     <div class="container my-5">
-        <h1 class="text-center mb-4">Welcome, Team Leader</h1>
         
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Welcome, {{ $user->name }}</h2>
-            <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
-        </div>
 
-        <!-- Success Message -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+       
 
-        <!-- Assigned Interns Section -->
+        <!-- Assigned Interns -->
         <h4>Assigned Interns</h4>
         <table class="table table-striped">
             <thead>
@@ -88,11 +79,10 @@
                         <td>{{ $assignment->intern->email }}</td>
                         <td>{{ $assignment->created_at->format('d-m-Y') }}</td>
                         <td>
-                            <!-- Remove Intern Button -->
-                            <form action="{{ route('tl.interns.destroy', $assignment->intern->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('tl.interns.destroy', $assignment->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Remove Intern</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                             </form>
                         </td>
                     </tr>
@@ -104,7 +94,7 @@
             </tbody>
         </table>
 
-        <!-- Assign New Intern Section -->
+        <!-- Assign New Intern -->
         <h4 class="mt-5">Assign New Intern</h4>
         <form action="{{ route('tl.interns.store') }}" method="POST">
             @csrf
@@ -120,6 +110,37 @@
             <button type="submit" class="btn btn-primary">Assign Intern</button>
         </form>
     </div>
+    <div class="container my-5">
+   
+
+    <!-- Study Material Block -->
+    <div class="mb-4">
+    <h3>Study Material</h3>
+
+    @if($materials->isEmpty())
+    <p>No study materials available.</p>
+@else
+    <form action="" method="GET" id="studyMaterialForm">
+        <select name="table_name" id="table_name" class="form-select" onchange="updateFormAction()">
+            <option value="">Select a course</option>
+            @foreach ($materials as $material)
+                <option value="{{ $material->table_name }}">{{ $material->table_name }}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-primary mt-3">View</button>
+    </form>
+@endif
+
+    </div>
+    
+
+<script>
+    function updateFormAction() {
+        const tableName = document.getElementById('table_name').value;
+        const form = document.getElementById('studyMaterialForm');
+        form.action = tableName ? `/study-material/view/${tableName}` : '';
+    }
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

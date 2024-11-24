@@ -1,0 +1,26 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($courses as $course)
+        <tr>
+            <td>{{ $course->id }}</td>
+            <td>{{ $course->name }}</td>
+            <td>{{ $course->description }}</td>
+            <td>
+                <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>

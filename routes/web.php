@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TlInternAssignmentController;
 use App\Http\Controllers\InternController;
+use App\Http\Controllers\TLController;
+use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\StudyMaterialController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,11 +19,6 @@ use App\Http\Controllers\InternController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
@@ -40,7 +40,10 @@ Route::view('/future-proofing', 'future-proofing');
 // Team Leader Routes
 Route::middleware(['auth', 'role:team_leader'])->group(function () {
     Route::get('/tl/interns', [TlInternAssignmentController::class, 'index'])->name('tl.interns.index'); // Your custom view
+    
+
     Route::get('/tl/dashboard', [TlInternAssignmentController::class, 'dashboard'])->name('tl.dashboard');
+
     Route::get('/tl/interns/create', [TlInternAssignmentController::class, 'create'])->name('tl.interns.create');
     Route::post('/tl/interns', [TlInternAssignmentController::class, 'store'])->name('tl.interns.store');
     Route::delete('/tl/dashboard/{internId}', [TlInternAssignmentController::class, 'destroy'])->name('tl.interns.destroy');
@@ -54,3 +57,35 @@ Route::middleware(['auth', 'role:intern'])->group(function () {
 
 //log out
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+//Tracking intern work flow
+
+
+
+// Intern Dashboard Routes
+Route::middleware(['auth', 'role:intern'])->group(function () {
+    Route::get('/intern/assigned-courses', [InternController::class, 'assignedCourses'])->name('intern.assigned.courses');
+    Route::get('/intern/tasks', [InternController::class, 'tasks'])->name('intern.tasks');
+    Route::get('/intern/progress', [InternController::class, 'progress'])->name('intern.progress');
+});
+
+
+// Route for Assign Course Page
+Route::get('/assign-course', [CourseController::class, 'view'])->name('assign.course.view');
+
+// Route for Viewing Intern Progress
+Route::get('/intern-progress', [ProgressController::class, 'view'])->name('intern.progress.view');
+Route::get('/courses/{id}', [CourseController::class, 'view']);
+Route::patch('/interns/{id}/status', [InternController::class, 'updateStatus'])->name('interns.updateStatus');
+
+
+Route::get('/study-material/view/{table_name}', [TlInternAssignmentController::class, 'viewTable'])
+    ->name('study.material.view')
+    ->middleware(['auth', 'role:team_leader']); // Add middleware to ensure only authorized users access this
+
+// Study Material Routes
+
+
+
+
+
+

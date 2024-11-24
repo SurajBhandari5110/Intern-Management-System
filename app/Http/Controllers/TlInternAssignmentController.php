@@ -5,7 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use TCG\Voyager\Models\Role; 
+use App\Models\StudyMaterial;
 use App\Models\TlInternAssignment;
+use Illuminate\Support\Facades\DB;
 class TlInternAssignmentController extends Controller
 
 
@@ -20,7 +22,9 @@ class TlInternAssignmentController extends Controller
             ->get();
         return view('tl.index', compact('interns','user'));
     }
-    public function dashboard()
+    
+
+public function dashboard()
 {
     $user = Auth::user(); // Fetch the logged-in TL
 
@@ -37,10 +41,28 @@ class TlInternAssignmentController extends Controller
     ->get();
 
     // Fetch logged-in TL data
-    $tlData = User::find($user->id);  // Get the TL details (Name, Email, Image)
+    $tlData = User::find($user->id); // Get the TL details (Name, Email, Image)
 
-    return view('tl.dashboard', compact('user','assignments', 'interns', 'tlData'));
+    // Fetch study materials
+    $materials = StudyMaterial::all(); // Assuming StudyMaterial model is mapped to the studymaterial table
+
+    return view('tl.dashboard', compact('user', 'assignments', 'interns', 'tlData', 'materials'));
+    
 }
+
+
+
+public function viewTable($tableName)
+{
+    
+
+    // Fetch all data from the table
+    $data = collect(DB::table($tableName)->get())->map(fn($item) => (array) $item);
+
+    // Pass the data to the view
+    return view('study-material.view', compact('data', 'tableName'));
+}
+
 
     
     
