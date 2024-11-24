@@ -153,6 +153,11 @@
             </form>
         @endif
     </div>
+    <div class="container my-5 d-flex justify-content-center">
+    <a href="/tl/track-performance" class="btn btn-lg btn-info px-5 py-3 shadow" style="font-size: 1.25rem; border-radius: 30px;">
+        Track Intern Performance
+    </a>
+</div>
     
 
 

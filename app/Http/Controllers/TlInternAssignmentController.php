@@ -157,6 +157,35 @@ public function sendStudyMaterialToIntern(Request $request)
 
     return redirect()->back()->with('success', 'Study material sent successfully to the intern.');
 }
+public function trackPerformance(Request $request)
+{
+    $user = Auth::user(); // Logged-in TL
+    $tlId = $user->id;
+
+    // Fetch assigned interns for the dropdown
+    $interns = TlInternAssignment::where('tl_id', $tlId)
+        ->with('intern') // Assuming a relationship is defined in the `TlInternAssignment` model
+        ->get();
+
+    // Fetch courses for the dropdown
+    $courses = StudyMaterial::pluck('table_name'); // Assuming `table_name` holds course names
+
+    $records = [];
+
+    // If form is submitted, fetch data
+    if ($request->has(['intern_id', 'course'])) {
+        $internId = $request->intern_id;
+        $course = $request->course;
+
+        $records = DB::table('intern_study_records')
+            ->where('tl_id', $tlId)
+            ->where('intern_id', $internId)
+            ->where('course', $course)
+            ->get();
+    }
+
+    return view('tl.track-performance', compact('interns', 'courses', 'records'));
+}
 
 
 
