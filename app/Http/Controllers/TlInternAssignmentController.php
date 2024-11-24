@@ -9,6 +9,8 @@ use App\Models\StudyMaterial;
 use App\Models\TlInternAssignment;
 use Illuminate\Support\Facades\DB;
 use App\Models\InternStudyRecord;
+use Illuminate\Support\Facades\Schema;
+
 class TlInternAssignmentController extends Controller
 
 
@@ -24,6 +26,12 @@ class TlInternAssignmentController extends Controller
         return view('tl.index', compact('interns','user'));
     }
     
+    // Show a form to assign a new intern
+    public function create()
+    {
+        $interns = User::where('role', 'intern')->get(); // Filter interns from the User table
+        return view('tl.assign', compact('interns'));
+    }
 
     public function dashboard()
     {
@@ -70,12 +78,7 @@ public function viewTable($tableName)
 
     
 
-    // Show a form to assign a new intern
-    public function create()
-    {
-        $interns = User::where('role', 'intern')->get(); // Filter interns from the User table
-        return view('tl.assign', compact('interns'));
-    }
+    
 
     // Assign a new intern
     public function store(Request $request)
@@ -111,6 +114,50 @@ public function viewTable($tableName)
     $progress = InternStudyRecord::where('intern_id', $internId)->get();
     return view('tl.study_progress', compact('progress'));
 }
+public function sendStudyMaterialToIntern(Request $request)
+{
+    $request->validate([
+        'table_name' => 'required|string', // This is the course name, e.g., 'python'
+        'intern_id' => 'required|exists:users,id',
+    ]);
+
+    $tableName = $request->table_name; // e.g., 'python'
+    $internId = $request->intern_id;
+    $tlId = auth()->id(); // Logged-in TL ID
+
+    // Check if the table exists in the database
+    if (!Schema::hasTable($tableName)) {
+        return redirect()->back()->with('error', 'The specified course table does not exist.');
+    }
+
+    // Fetch all topics from the specified course table
+    $courseData = DB::table($tableName)->get();
+
+    if ($courseData->isEmpty()) {
+        return redirect()->back()->with('error', 'No topics found in the specified course.');
+    }
+
+    // Prepare data for insertion into `intern_study_records`
+    $insertData = $courseData->map(function ($topic) use ($tlId, $internId, $tableName) {
+        return [
+            'tl_id' => $tlId,
+            'intern_id' => $internId,
+            'course' => $tableName, // The course name (e.g., 'python')
+            'topic_id' => $topic->topic_id, // Assuming `topic_id` exists in the course table
+            'topic' => $topic->topic, // Assuming `topic` exists in the course table
+            'status' => null, // Default value
+            'comment' => null, // Default value
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    })->toArray();
+
+    // Insert data into the `intern_study_records` table
+    DB::table('intern_study_records')->insert($insertData);
+
+    return redirect()->back()->with('success', 'Study material sent successfully to the intern.');
+}
+
 
 
 
