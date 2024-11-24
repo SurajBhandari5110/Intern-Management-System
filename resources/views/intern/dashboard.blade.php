@@ -66,7 +66,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title">Tasks</h5>
                     <p class="card-text">View and manage your assigned tasks.</p>
-                    <a href="{{ route('intern.tasks') }}" class="btn btn-success">View Tasks</a>
+                    
                 </div>
             </div>
         </div>

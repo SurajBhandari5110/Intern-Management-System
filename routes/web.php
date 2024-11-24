@@ -9,6 +9,8 @@ use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudyMaterialController;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,8 +93,23 @@ Route::get('/tl/study-progress/{internId}', [TlInternAssignmentController::class
 
 Route::post('/send-study-material', [TlInternAssignmentController::class, 'sendStudyMaterialToIntern'])->name('send.study.material');
 Route::get('/tl/track-performance', [TlInternAssignmentController::class, 'trackPerformance'])->name('tl.track.performance');
+Route::middleware(['auth', 'role:intern'])->group(function () {
+    Route::get('/intern/assigned-courses', [InternController::class, 'assignedCourses'])->name('intern.assigned.courses');
+    Route::get('/intern/course/{id}', [InternController::class, 'viewCourse'])->name('intern.course.view');
+    Route::patch('/intern/course/{id}', [InternController::class, 'updateRecord'])->name('intern.course.update');
+});
 
 
 
 
 
+
+
+// Display assigned courses
+Route::get('/intern/assigned-courses', [InternController::class, 'assignedCourses'])->name('intern.assigned.courses');
+
+// Display course details and update form
+Route::get('/intern/course-details/{course}', [InternController::class, 'courseDetails'])->name('intern.course.details');
+
+// Handle course detail updates
+Route::post('/intern/course-details/{course}', [InternController::class, 'updateCourseDetails'])->name('intern.course.update');
