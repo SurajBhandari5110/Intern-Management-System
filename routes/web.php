@@ -32,9 +32,7 @@ Route::view('/', 'index');
 Route::get('/login', [AuthController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/contact', function () {return view('contact');});
 Route::view('/about', 'about');
 Route::view('/future-proofing', 'future-proofing');
 

@@ -27,10 +27,10 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Intern Dashboard</a>
         <div class="d-flex">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-            </form>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                </form>
         </div>
     </div>
 </nav>
