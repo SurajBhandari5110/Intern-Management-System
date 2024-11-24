@@ -147,6 +147,7 @@ public function sendStudyMaterialToIntern(Request $request)
             'topic' => $topic->topic, // Assuming `topic` exists in the course table
             'status' => null, // Default value
             'comment' => null, // Default value
+            'link' => $topic->link, // Assuming each topic in the course table has a `link` field
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -157,6 +158,7 @@ public function sendStudyMaterialToIntern(Request $request)
 
     return redirect()->back()->with('success', 'Study material sent successfully to the intern.');
 }
+
 public function trackPerformance(Request $request)
 {
     $user = Auth::user(); // Logged-in TL

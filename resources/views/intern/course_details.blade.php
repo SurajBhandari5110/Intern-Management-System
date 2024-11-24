@@ -86,30 +86,41 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Topic</th>
-                                <th>Status</th>
-                                <th>Comment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($courseDetails as $detail)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $detail->topic }}</td>
-                                    <td>
-                                        <select name="data[{{ $loop->index }}][status]" class="form-select">
-                                            <option value="not started" {{ $detail->status == 'not started' ? 'selected' : '' }}>Not Started</option>
-                                            <option value="in progress" {{ $detail->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
-                                            <option value="completed" {{ $detail->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="data[{{ $loop->index }}][comment]" class="form-control" value="{{ $detail->comment }}">
-                                        <input type="hidden" name="data[{{ $loop->index }}][id]" value="{{ $detail->id }}">
-                                    </td>
-                                </tr>
+                        <tr>
+    <th>#</th>
+    <th>Topic</th>
+    <th>Study Material Link</th>
+    <th>Status</th>
+    <th>Comment</th>
+</tr>
+</thead>
+<tbody>
+    @foreach ($courseDetails as $detail)
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $detail->topic }}</td>
+            <td>
+                <!-- Check if link is available and create a clickable link -->
+                @if ($detail->link)
+                    <a href="{{ $detail->link }}" target="blank" class="btn btn-link">View Material</a>
+                @else
+                    <span>No Link Available</span>
+                @endif
+            </td>
+            <td>
+                <select name="data[{{ $loop->index }}][status]" class="form-select">
+                    <option value="not started" {{ $detail->status == 'not started' ? 'selected' : '' }}>Not Started</option>
+                    <option value="in progress" {{ $detail->status == 'in progress' ? 'selected' : '' }}>In Progress</option>
+                    <option value="completed" {{ $detail->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" name="data[{{ $loop->index }}][comment]" class="form-control" value="{{ $detail->comment }}">
+                <input type="hidden" name="data[{{ $loop->index }}][id]" value="{{ $detail->id }}">
+            </td>
+        </tr>
+   
+
                             @endforeach
                         </tbody>
                     </table>
