@@ -8,6 +8,7 @@ use TCG\Voyager\Models\Role;
 use App\Models\StudyMaterial;
 use App\Models\TlInternAssignment;
 use Illuminate\Support\Facades\DB;
+use App\Models\InternStudyRecord;
 class TlInternAssignmentController extends Controller
 
 
@@ -105,6 +106,15 @@ public function viewTable($tableName)
         }
     
     }
+    public function viewStudyProgress($internId)
+{
+    $progress = InternStudyRecord::where('intern_id', $internId)->get();
+    return view('tl.study_progress', compact('progress'));
+}
+
+
+
+
 }
 
 

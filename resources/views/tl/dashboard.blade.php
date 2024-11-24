@@ -53,13 +53,8 @@
         </div>
     </div>
 
-    <!-- Main Dashboard -->
+    <!-- Assigned Interns -->
     <div class="container my-5">
-        
-
-       
-
-        <!-- Assigned Interns -->
         <h4>Assigned Interns</h4>
         <table class="table table-striped">
             <thead>
@@ -110,37 +105,45 @@
             <button type="submit" class="btn btn-primary">Assign Intern</button>
         </form>
     </div>
-    <div class="container my-5">
-   
 
     <!-- Study Material Block -->
-    <div class="mb-4">
-    <h3>Study Material</h3>
+    <div class="container my-5">
+        <h3>Study Material</h3>
+        
+        @if($materials->isEmpty())
+            <p>No study materials available.</p>
+        @else
+            <form id="studyMaterialForm">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($materials as $material)
+                            <tr>
+                                <td>{{ $material->table_name }}</td>
+                                <td>
+                                    <!-- View Button -->
+                                    <a href="{{ route('study.material.view', ['table_name' => $material->table_name]) }}" class="btn btn-primary btn-sm">View</a>
 
-    @if($materials->isEmpty())
-    <p>No study materials available.</p>
-@else
-    <form action="" method="GET" id="studyMaterialForm">
-        <select name="table_name" id="table_name" class="form-select" onchange="updateFormAction()">
-            <option value="">Select a course</option>
-            @foreach ($materials as $material)
-                <option value="{{ $material->table_name }}">{{ $material->table_name }}</option>
-            @endforeach
-        </select>
-        <button type="submit" class="btn btn-primary mt-3">View</button>
-    </form>
-@endif
-
+                                    <!-- Send to Intern Button -->
+                                    <form action="{{ route('send.study.material') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <input type="hidden" name="table_name" value="{{ $material->table_name }}">
+                                        <input type="hidden" name="intern_id" value="{{ $assignment->intern->id }}"> <!-- Intern ID -->
+                                        <button type="submit" class="btn btn-success btn-sm">Send to {{ $assignment->intern->name }}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </form>
+        @endif
     </div>
-    
-
-<script>
-    function updateFormAction() {
-        const tableName = document.getElementById('table_name').value;
-        const form = document.getElementById('studyMaterialForm');
-        form.action = tableName ? `/study-material/view/${tableName}` : '';
-    }
-</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

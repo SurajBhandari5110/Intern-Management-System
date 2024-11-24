@@ -84,6 +84,11 @@ Route::get('/study-material/view/{table_name}', [TlInternAssignmentController::c
 
 // Study Material Routes
 
+Route::post('/tl/send-study-material', [TlInternAssignmentController::class, 'sendStudyMaterial'])->name('send.study.material');
+
+
+Route::get('/tl/study-progress/{internId}', [TlInternAssignmentController::class, 'viewStudyProgress'])->name('study.progress');
+
 
 
 
