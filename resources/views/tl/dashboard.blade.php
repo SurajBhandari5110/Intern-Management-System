@@ -74,10 +74,11 @@
                         <td>{{ $assignment->intern->email }}</td>
                         <td>{{ $assignment->created_at->format('d-m-Y') }}</td>
                         <td>
-                            <form action="{{ route('tl.interns.destroy', $assignment->id) }}" method="POST" style="display:inline;">
+                            <!-- Remove Intern Button -->
+                            <form action="{{ route('tl.interns.destroy', $assignment->intern->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Remove Intern</button>
                             </form>
                         </td>
                     </tr>
@@ -122,24 +123,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($materials as $material)
-                            <tr>
-                                <td>{{ $material->table_name }}</td>
-                                <td>
-                                    <!-- View Button -->
-                                    <a href="{{ route('study.material.view', ['table_name' => $material->table_name]) }}" class="btn btn-primary btn-sm">View</a>
+    @foreach ($materials as $material)
+        <tr>
+            <td>{{ $material->table_name }}</td>
+            <td>
+                <!-- View Button -->
+                <a href="{{ route('study.material.view', ['table_name' => $material->table_name]) }}" class="btn btn-primary btn-sm">View</a>
 
-                                    <!-- Send to Intern Button -->
-                                    <form action="{{ route('send.study.material') }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <input type="hidden" name="table_name" value="{{ $material->table_name }}">
-                                        <input type="hidden" name="intern_id" value="{{ $assignment->intern->id }}"> <!-- Intern ID -->
-                                        <button type="submit" class="btn btn-success btn-sm">Send to {{ $assignment->intern->name }}</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+                <!-- Send to Intern Button -->
+                @if ($assignments->isEmpty())
+                    <span>No interns assigned to you.</span> <!-- Show a message if no interns are assigned -->
+                @else
+                    @foreach ($assignments as $assignment)
+                        <form action="{{ route('send.study.material') }}" method="POST" style="display:inline;">
+                            @csrf
+                            <input type="hidden" name="table_name" value="{{ $material->table_name }}">
+                            <input type="hidden" name="intern_id" value="{{ $assignment->intern->id }}"> <!-- Intern ID -->
+                            <button type="submit" class="btn btn-success btn-sm">Send to {{ $assignment->intern->name }}</button>
+                        </form>
+                    @endforeach
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                 </table>
             </form>
         @endif
