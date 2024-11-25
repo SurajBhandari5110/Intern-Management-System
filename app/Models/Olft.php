@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EOD extends Model
+class Olft extends Model
 {
     use HasFactory;
 
@@ -16,4 +16,5 @@ class EOD extends Model
     {
         return $this->belongsTo(User::class, 'intern_id');
     }
+    
 }

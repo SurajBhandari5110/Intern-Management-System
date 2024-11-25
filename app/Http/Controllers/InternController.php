@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Olft;
 use TCG\Voyager\Models\Role; 
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,48 @@ class InternController extends Controller
 
         return redirect()->route('intern.course.details', $course)->with('success', 'Course details updated successfully!');
     }
+    public function showEODForm()
+{
+    // Fetch the EOD record for the logged-in intern (assuming intern_id is 3 for this example)
+    $internId = auth()->id(); // Change this according to your login system
+    $eodRecord = Olft::where('intern_id', $internId)->first();
+
+    // If no EOD record exists for today, create one
+    if (!$eodRecord) {
+        $eodRecord = Olft::create([
+            'intern_id' => $internId,
+            'today' => '',       // Default empty fields for the form
+            'tomorrow' => '',
+            'issue' => '',
+        ]);
+    }
+
+    return view('intern/eod_form', compact('eodRecord'));
+}
+public function submitEOD(Request $request)
+{
+    $request->validate([
+        'today' => 'required|string',
+        'tomorrow' => 'required|string',
+        'issue' => 'nullable|string',
+    ]);
+
+    // Update the EOD record for the logged-in intern
+    $internId = auth()->id(); // Get the logged-in intern's ID
+
+    $eodRecord = Olft::updateOrCreate(
+        ['intern_id' => $internId],
+        [
+            'today' => $request->input('today'),
+            'tomorrow' => $request->input('tomorrow'),
+            'issue' => $request->input('issue'),
+            'updated_at' => now(),
+        ]
+    );
+
+    return redirect()->back()->with('success', 'EOD submitted successfully.');
+}
+
 
 
 

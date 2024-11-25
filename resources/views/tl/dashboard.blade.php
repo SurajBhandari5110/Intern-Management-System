@@ -154,12 +154,75 @@
         @endif
     </div>
     <div class="container my-5 d-flex justify-content-center">
-    <a href="/tl/track-performance" class="btn btn-lg btn-info px-5 py-3 shadow" style="font-size: 1.25rem; border-radius: 30px;">
-        Track Intern Performance
-    </a>
+    <h1>
+Track Intern's EOD(End Of Day)</h1>
+   
+<form action="{{ route('tl.eod_reports') }}" method="GET">
+    <div class="form-group">
+        <label for="intern_id">Select Intern:</label>
+        <select name="intern_id" id="intern_id" class="form-control" required>
+            <option value="4">Suraj</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Show EOD</button>
+</form>
+
+</form>
 </div>
     <!-- Button to navigate to the intern assignment form -->
-<a href="{{ route('tl.assign_intern') }}" class="btn btn-primary mt-3">Assign Intern to Project</a>
+    <div class="container my-5">
+        <div class="row gy-4">
+            <!-- Assign Intern to Project Card -->
+            <div class="col-md-4">
+                <div class="card custom-card">
+                    <div class="card-header text-center">
+                        <h5>Assign Intern to Project</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="{{ route('tl.assign_intern') }}" class="btn btn-success btn-custom">Assign Intern</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reward Intern Card -->
+            <div class="col-md-4">
+                <div class="card custom-card">
+                    <div class="card-header reward-header text-center">
+                        <h5>Reward Intern According to Monthly Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="reward_intern_id" class="form-label">Select Intern</label>
+                                <select name="reward_intern_id" id="reward_intern_id" class="form-select" required>
+                                    <option value="" disabled selected>Choose an intern</option>
+                                    @foreach($interns as $intern)
+                                        <option value="{{ $intern->id }}">{{ $intern->name }} ({{ $intern->email }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reward_amount" class="form-label">Reward Amount</label>
+                                <input type="number" name="reward_amount" id="reward_amount" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100 btn-custom">Reward Intern</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card custom-card">
+                    <div class="card-header assign-header text-center">
+                        <h5>Track Intern Learning Performance</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="/tl/track-performance" class="btn btn-primary btn-custom">Track Performance</a>
+                    </div>
+                </div>
+            </div>
+
+</div>
 
 
 

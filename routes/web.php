@@ -118,3 +118,9 @@ Route::post('/intern/course-details/{course}', [InternController::class, 'update
 
 Route::get('/tl/assign-intern', [TlInternAssignmentController::class, 'assignIntern'])->name('tl.assign_intern');
 Route::post('tl/assign-intern', [TlInternAssignmentController::class, 'storeAssignment'])->name('tl.project_team.store');
+
+//inter submitting eod
+Route::get('intern/eod_form', [InternController::class, 'showEODForm'])->name('interns.eodForm');
+Route::post('intern/eod_form', [InternController::class, 'submitEOD'])->name('interns.submitEOD');
+//showing eod to TL
+Route::get('/tl/eod-reports', [TlInternAssignmentController::class, 'showEODReports'])->name('tl.eod_reports');

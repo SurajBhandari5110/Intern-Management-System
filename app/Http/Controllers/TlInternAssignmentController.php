@@ -218,51 +218,25 @@ public function storeAssignment(Request $request)
     return redirect()->route('tl.dashboard')->with('success', 'Intern assigned to the project successfully.');
 }
 
-public function submitEOD(Request $request)
+
+
+public function showEODReports(Request $request)
 {
+    // Validate the request to ensure an intern ID is selected
     $request->validate([
-        'today' => 'required|string',
-        'tomorrow' => 'required|string',
-        'issue' => 'nullable|string',
+        'intern_id' => 'required|exists:users,id',
     ]);
 
-    // Get the project assigned to the intern
-    $internId = auth()->id();
-    $project = ProjectTeam::where('intern_id', $internId)->first();
+    // Fetch the selected intern's ID
+    $internId = $request->input('intern_id');
 
-    if (!$project) {
-        return redirect()->back()->with('error', 'No project assigned.');
-    }
+    // Fetch EOD data for the selected intern from the 'olft' table
+    $eodReports = DB::table('olfts')->where('intern_id', $internId)->get();
 
-    // Determine table name dynamically (e.g., `olft`)
-    $projectTable = $project->project->name; // Assuming project name is used as table name
-
-    DB::table($projectTable)->insert([
-        'intern_id' => $internId,
-        'today' => $request->today,
-        'tomorrow' => $request->tomorrow,
-        'issue' => $request->issue,
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    return redirect()->back()->with('success', 'EOD submitted successfully.');
+    // Pass the data to the view
+    return view('/tl/eod-reports', compact('eodReports'));
 }
 
-public function viewEODReports($projectId)
-{
-    $project = Project::findOrFail($projectId);
-    $tlId = auth()->id();
-
-    // Ensure the TL has access to this project
-    $interns = ProjectTeam::where('project_id', $projectId)
-                          ->where('tl_id', $tlId)
-                          ->pluck('intern_id');
-
-    $reports = DB::table($project->name)->whereIn('intern_id', $interns)->get();
-
-    return view('tl.eod_reports', compact('reports', 'project'));
-}
 
 
 

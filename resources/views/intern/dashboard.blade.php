@@ -109,6 +109,17 @@
             </div>
         </div>
     </div>
+    <div class="dashboard-link-container mt-4">
+    <div class="card dashboard-card shadow">
+        <div class="card-body">
+            <h5 class="card-title">End of Day Report</h5>
+            <p class="card-text">
+                Submit your daily work updates and highlight any challenges you faced during working on project. This helps your Team Lead track progress and assist you better.
+            </p>
+            <a href="{{ route('interns.eodForm') }}" class="btn btn-success">Submit EOD Report</a>
+        </div>
+    </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
