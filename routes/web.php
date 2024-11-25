@@ -124,3 +124,10 @@ Route::get('intern/eod_form', [InternController::class, 'showEODForm'])->name('i
 Route::post('intern/eod_form', [InternController::class, 'submitEOD'])->name('interns.submitEOD');
 //showing eod to TL
 Route::get('/tl/eod-reports', [TlInternAssignmentController::class, 'showEODReports'])->name('tl.eod_reports');
+//HR form for inter
+
+
+// Route for filling HR form
+Route::view('/intern/hr-form','intern/hr-form');
+
+

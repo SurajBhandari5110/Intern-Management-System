@@ -154,20 +154,9 @@
         @endif
     </div>
     <div class="container my-5 d-flex justify-content-center">
-    <h1>
-Track Intern's EOD(End Of Day)</h1>
-   
-<form action="{{ route('tl.eod_reports') }}" method="GET">
-    <div class="form-group">
-        <label for="intern_id">Select Intern:</label>
-        <select name="intern_id" id="intern_id" class="form-control" required>
-            <option value="4">Suraj</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Show EOD</button>
-</form>
+  
 
-</form>
+
 </div>
     <!-- Button to navigate to the intern assignment form -->
     <div class="container my-5">
@@ -223,6 +212,26 @@ Track Intern's EOD(End Of Day)</h1>
             </div>
 
 </div>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Track Intern's EOD (End of Day)</h1>
+    <div class="card mx-auto" style="max-width: 500px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div class="card-body">
+            <form action="{{ route('tl.eod_reports') }}" method="GET">
+                <div class="mb-3">
+                    <label for="intern_id" class="form-label"><strong>Select Intern:</strong></label>
+                    <select name="intern_id" id="intern_id" class="form-select" required>
+                        <option value="" disabled selected>Choose an Intern</option>
+                        @foreach($interns as $intern)
+                            <option value="{{ $intern->id }}">{{ $intern->name }} ({{ $intern->email }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Show EOD</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 

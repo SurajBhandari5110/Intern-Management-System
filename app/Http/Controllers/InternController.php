@@ -104,7 +104,10 @@ public function submitEOD(Request $request)
     return redirect()->back()->with('success', 'EOD submitted successfully.');
 }
 
-
+public function showHRForm()
+    {
+        return view('intern/hr-form');
+    }
 
 
 }
