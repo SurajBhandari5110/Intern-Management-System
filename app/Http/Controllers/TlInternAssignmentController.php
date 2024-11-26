@@ -48,7 +48,7 @@ class TlInternAssignmentController extends Controller
         $interns = User::whereHas('roles', function($query) {
             $query->where('name', 'intern'); // Ensure the role name is 'intern'
         })
-        ->whereNotIn('id', $assignments->pluck('intern_id')) // Exclude already assigned interns
+       // Exclude already assigned interns
         ->get();
     
         // Fetch logged-in TL data
