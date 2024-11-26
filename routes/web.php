@@ -128,6 +128,10 @@ Route::get('/tl/eod-reports', [TlInternAssignmentController::class, 'showEODRepo
 
 
 // Route for filling HR form
-Route::view('/intern/hr-form','intern/hr-form');
 
+use App\Http\Controllers\HRFormController;
+
+Route::get('/intern/hr-form', [HRFormController::class, 'showHRForm'])->name('hr.form');
+Route::post('/intern/hr-form1', [HRFormController::class, 'submitHRForm1'])->name('hr.form1.submit');
+Route::post('/intern/hr-form2', [HRFormController::class, 'submitHRForm2'])->name('hr.form2.submit');
 

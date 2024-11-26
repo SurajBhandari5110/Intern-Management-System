@@ -3,114 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HR Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(to right, #111, #f39c12); /* Gradient background */
-            color: #333;
-            font-family: 'Poppins', sans-serif;
-        }
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            margin-bottom: 20px;
-        }
-        .card-body {
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        .btn-custom {
-            background-color: #1abc9c;
-            color: white;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .btn-custom:hover {
-            background-color: #16a085;
-        }
-    </style>
+    <title>HR Forms</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="container mt-5">
+        <!-- Success Message -->
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;" id="successMessage">
+            Success Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2c3e50;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Intern Dashboard</a>
-        <div class="d-flex">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger btn-sm">Logout</button>
-            </form>
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">HR Forms Submission</h2>
+            <p class="text-muted">Please fill out the necessary details and upload the required documents.</p>
+        </div>
+
+        <!-- Form 1 -->
+        <div class="card shadow mb-5">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Form 1: Document Upload</h4>
+            </div>
+            <div class="card-body">
+                <form action="/form1/submit" method="POST" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="marksheet_12th" class="form-label">12th Marksheet</label>
+                            <input type="file" name="marksheet_12th" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="marksheet_10th" class="form-label">10th Marksheet</label>
+                            <input type="file" name="marksheet_10th" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="adhar_card" class="form-label">Aadhar Card</label>
+                            <input type="file" name="adhar_card" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="photo" class="form-label">Photo</label>
+                            <input type="file" name="photo" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="degree" class="form-label">Degree</label>
+                            <input type="file" name="degree" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sign_offerletter" class="form-label">Signed Offer Letter</label>
+                            <input type="file" name="sign_offerletter" class="form-control">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-5">Submit Form 1</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Form 2 -->
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Form 2: Additional Information</h4>
+            </div>
+            <div class="card-body">
+                <form action="/form2/submit" method="POST" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="bankDetails" class="form-label">Bank Details</label>
+                            <input type="text" name="bankDetails" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="collegeName" class="form-label">College Name</label>
+                            <input type="text" name="collegeName" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone_Placementcell" class="form-label">Phone Placement Cell</label>
+                            <input type="text" name="phone_Placementcell" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="NOC" class="form-label">NOC</label>
+                            <input type="file" name="NOC" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Refer_a_friend" class="form-label">Refer a Friend</label>
+                            <input type="file" name="Refer_a_friend" class="form-control">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success px-5">Submit Form 2</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</nav>
 
-<div class="container my-5">
-    <h1 class="text-center mb-4 text-white">HR Form</h1>
-
-    <!-- Fill Personal Details Section -->
-    <div class="card shadow">
-        <div class="card-body">
-            <h5 class="card-title">Fill Personal Details</h5>
-            <p>Please provide your personal details to get started.</p>
-            <form action="" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="full_name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="full_name" name="full_name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone" name="phone" required>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" name="address" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-custom">Next: Fill HR Form</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Fill HR Form Section -->
-    <div class="card shadow">
-        <div class="card-body">
-            <h5 class="card-title">Fill HR Form</h5>
-            <p>Provide details as requested by HR.</p>
-            <form action="" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="position" class="form-label">Position</label>
-                    <input type="text" class="form-control" id="position" name="position" required>
-                </div>
-                <div class="mb-3">
-                    <label for="joining_date" class="form-label">Expected Joining Date</label>
-                    <input type="date" class="form-control" id="joining_date" name="joining_date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="experience" class="form-label">Previous Experience</label>
-                    <textarea class="form-control" id="experience" name="experience"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="education" class="form-label">Highest Education</label>
-                    <input type="text" class="form-control" id="education" name="education" required>
-                </div>
-                <button type="submit" class="btn btn-custom">Submit HR Form</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

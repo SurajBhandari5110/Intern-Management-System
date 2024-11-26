@@ -60,13 +60,13 @@
             justify-content: center;
             align-items: center;
             margin-top: 40px;
-            gap: 20px;
+            gap: 50px;
             flex-wrap: wrap; /* Allow wrapping for small screens */
         }
         /* Adjust card width */
         .dashboard-card {
             width: 48%; /* Adjusted width for two cards side by side */
-            max-width: 600px;
+            max-width: 700px;
         }
         .button-container {
             display: flex;
@@ -93,6 +93,7 @@
         .btn-info:hover {
             background-color: #2980b9;
         }
+        
     </style>
 </head>
 <body>
@@ -128,7 +129,7 @@
             <div class="card-body">
                 <h5 class="card-title">Fill HR Form</h5>
                 <p class="card-text">Complete the HR form to proceed with your onboarding process.</p>
-                <a href="{{ route('intern/hr-form') }}" class="btn btn-custom">Fill Form</a>
+                <a href="{{ route('hr.form') }}" class="btn btn-custom">Fill Form</a>
             </div>
         </div>
         
@@ -166,7 +167,28 @@
             </div>
         </div>
     </div>
+    </div>
+    <div class="container my-5 git">
+    <div class="github-integration p-4 shadow-lg rounded-4" style="background: linear-gradient(to right, #7d7d7d, #000); color: white;">
+        <h5 class="text-center fw-bold mb-3" style="font-size: 1.8rem;">Integrate Your GitHub Repository</h5>
+        <p class="text-center text-white" style="font-size: 1rem;">
+            Provide your GitHub repository link to enable AI-generated End of Day (EOD) reports integration.
+        </p>
+        <form action="" method="POST" class="mt-4">
+            @csrf
+            <div class="mb-4">
+                <label for="github_repo" class="form-label fw-semibold" style="font-size: 1.2rem;">GitHub Repository URL</label>
+                <input type="url" name="github_repo" id="github_repo" class="form-control form-control-lg border-0 shadow-sm" placeholder="https://github.com/username/repo" required style="border-radius: 10px;">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-light fw-bold px-4 py-2" style="color: #2193b0; border-radius: 20px; font-size: 1.1rem;">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
